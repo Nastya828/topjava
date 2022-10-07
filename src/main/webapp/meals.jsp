@@ -7,6 +7,9 @@
 </head>
 <body>
 <h3><a href="index.html">Home</a></h3>
+<ul>
+    <li><a href="addMeals.jsp">Add Meal</a></li>
+</ul>
 <hr>
 <table width="100%" border="1" align="center">
     <tr>
