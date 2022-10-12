@@ -11,7 +11,7 @@
     <li><a href="addMeals.jsp">Add Meal</a></li>
 </ul>
 <hr>
-<table width="100%" border="1" align="center">
+<table width="50%" border="1" align="center">
     <tr>
         <th>Дата/Время</th>
         <th>Описание</th>
@@ -23,6 +23,8 @@
             <td><c:out value="${f:formatLocalDateTime(meal.dateTime, 'yyyy-MM-dd HH:mm')}"/></td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
+            <td><a href="UpdateMealServlet?action=update&mealId=<c:out value="${meal.id}"/>">Update</a></td>
+            <td><a href="DeleteMealServlet?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
         </tr>
     </c:forEach>
 
