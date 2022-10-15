@@ -24,6 +24,7 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+
         if (action == null) {
             request.setAttribute("mealsForTables",
                     filteredByStreams(mealsRepository.getAll(), LocalTime.MIN,
@@ -36,10 +37,9 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
                 break;
             case ("create"):
-                final Meal meal = new Meal(null, LocalDateTime.now(), "", 500);
+                final Meal meal = new Meal(LocalDateTime.now(), "", 500);
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
-
             case ("update"):
                 int id = Integer.parseInt(request.getParameter("mealId"));
                 if (mealsRepository.get(id) != null) {
@@ -47,12 +47,12 @@ public class MealServlet extends HttpServlet {
                 }
                 request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
                 break;
-            default:
-                request.setAttribute("mealsForTables",
-                        filteredByStreams(mealsRepository.getAll(), LocalTime.MIN,
-                                LocalTime.MAX, CALORIES_PER_DAY));
-                request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-                break;
+//            default:
+//                request.setAttribute("mealsForTables",
+//                        filteredByStreams(mealsRepository.getAll(), LocalTime.MIN,
+//                                LocalTime.MAX, CALORIES_PER_DAY));
+//                request.getRequestDispatcher("/mealList.jsp").forward(request, response);
+//                break;
         }
     }
 
