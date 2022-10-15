@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
+
 
 import static ru.javawebinar.topjava.util.MealsUtil.*;
 
@@ -25,34 +25,26 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if (action == null) {
-            request.setAttribute("mealsForTables",
-                    filteredByStreams(mealsRepository.getAll(), LocalTime.MIN,
-                            LocalTime.MAX, CALORIES_PER_DAY));
-            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-        }
-        switch (Objects.requireNonNull(action)) {
+        switch (action == null ? "other" : action) {
             case ("delete"):
                 mealsRepository.delete(Integer.parseInt(request.getParameter("mealId")));
                 response.sendRedirect("meals");
                 break;
             case ("create"):
-                final Meal meal = new Meal(LocalDateTime.now(), "", 500);
+            case ("update"):
+                final Meal meal = action.equals("create") ?
+                        new Meal(LocalDateTime.now(), "", 500) :
+                        mealsRepository.get(Integer.parseInt(request.getParameter("mealId")));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
-            case ("update"):
-                int id = Integer.parseInt(request.getParameter("mealId"));
-                if (mealsRepository.get(id) != null) {
-                    request.setAttribute("meal", mealsRepository.get(id));
-                }
-                request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
                 break;
-//            default:
-//                request.setAttribute("mealsForTables",
-//                        filteredByStreams(mealsRepository.getAll(), LocalTime.MIN,
-//                                LocalTime.MAX, CALORIES_PER_DAY));
-//                request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-//                break;
+            case ("other"):
+            default:
+                request.setAttribute("mealsForTables",
+                        filteredByStreams(mealsRepository.getAll(), LocalTime.MIN,
+                                LocalTime.MAX, CALORIES_PER_DAY));
+                request.getRequestDispatcher("/mealList.jsp").forward(request, response);
+                break;
         }
     }
 
@@ -65,4 +57,5 @@ public class MealServlet extends HttpServlet {
                 Integer.parseInt(request.getParameter("calories"))));
         response.sendRedirect("meals");
     }
+
 }

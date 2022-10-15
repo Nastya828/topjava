@@ -20,6 +20,7 @@ public class Meal {
     }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
+        this.id = null;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
@@ -51,5 +52,9 @@ public class Meal {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isNew() {
+        return id == null;
     }
 }
